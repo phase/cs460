@@ -1,4 +1,5 @@
 #include "server.h"
+#include <pthread.h>
 
 /************************************************************************
  * MAIN
@@ -43,7 +44,11 @@ int main(int argc, char** argv) {
             perror("Error accepting client");
         } else {
             printf("\nAccepted client\n");
-            handle_client(client_socket);
+            pthread_t thread_id;
+            int *cs = malloc(sizeof(*cs));
+            *cs = client_socket;
+            pthread_create(&thread_id, NULL, handle_client, cs);
+            pthread_detach(thread_id);
         }
     }
 }
@@ -53,7 +58,8 @@ int main(int argc, char** argv) {
  * handle client
  ************************************************************************/
 
-void handle_client(int client_socket) {
+void *handle_client(void *args) {
+    int client_socket = *((int *) args);
     char input;
     int keep_going = TRUE;
     
@@ -85,8 +91,8 @@ void handle_client(int client_socket) {
     // cleanup
     if (close(client_socket) == -1) {
         perror("Error closing socket");
-        exit(EXIT_FAILURE);
     } else {
         printf("\nClosed socket to client, exit");
     }
+    free(args);
 }
