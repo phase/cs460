@@ -23,28 +23,13 @@ int main() {
         perror("Error connecting to server!\n");
         exit(EXIT_FAILURE);
     }
-    
+
     while (TRUE) {
-        printf("Input: ");
-        // read string
-        fgets(input, sizeof(input), stdin);
-        
-        int i = 0;
-        while (*(input + i)) {
-            // make the request to the server
-            write(client_socket, input + i, sizeof(char));
-            // get the result
-            read(client_socket, &c, sizeof(char));
-            if (c == 'q') {
-                close(client_socket);
-                printf("\nDone!\n");
-                exit(EXIT_SUCCESS);
-            }
-            printf("%c", c);
-            i++;
-        }
+        // get the result
+        read(client_socket, &c, sizeof(char));
+        if (c == '*') break;
+        printf("%c", c);
     }
     
     return EXIT_SUCCESS;
 }
-

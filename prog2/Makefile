@@ -7,5 +7,5 @@ echo-server-c: server.c
 	./echo-server-c
 
 daylight-client-c: daylightClient.c daylightClient.h
-	cc ./daylightClient.c ./daylightClient.h -o daylight-client
+	cc ./daylightClient.c -o daylight-client
 	./daylight-client

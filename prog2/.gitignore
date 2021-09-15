@@ -1,3 +1,4 @@
 echo-client-c
 echo-server-c
 *.lock
+daylight-client

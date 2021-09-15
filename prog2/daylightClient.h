@@ -25,7 +25,7 @@ void handle_client(int client_socket);
 /************************************************************************
  * preprocessor directives
  ************************************************************************/
-#define SERVER_ADDR "time.nist.gov" // loopback ip address
+#define SERVER_ADDR "132.163.96.6" // loopback ip address
 #define PORT 13             // port the server will listen on
 
 // I cannot let go of the old-fashioned way :) - for readability ...
