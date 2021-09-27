@@ -3,6 +3,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +13,7 @@ public class CollatzServer {
     private static ServerSocket serverSocket;
     private static int port;
     Socket clientSocket = null;
+    ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     public CollatzServer(int port) {
         try {
@@ -32,7 +35,7 @@ public class CollatzServer {
         while (true) {
             System.out.println("Waiting for connections on port #" + port);
 
-            new Thread(new CollatzThread(serverSocket.accept())).start();
+            executorService.submit(new CollatzThread(serverSocket.accept()));
         }
     }
 
@@ -41,7 +44,7 @@ public class CollatzServer {
         DataInputStream fromClient = null;
         DataOutputStream toClient = null;
 
-        int charFromClient = 0;
+        int numFromClient = 0;
         int state = 0;
         boolean keepGoing = true;
 
@@ -59,24 +62,24 @@ public class CollatzServer {
 
         // now talk to the client
         while (keepGoing) {
+            if (clientSocket.isClosed()) {
+                break;
+            }
             try {
-                charFromClient = fromClient.readByte();
-                System.out.print((char) charFromClient);
+                numFromClient = fromClient.readInt();
+                System.out.println("Num from client: " + numFromClient);
             } catch (IOException e) {
-                System.err.println("Error reading character from client");
+                System.err.println("Warning reading character from client");
                 return;
             }
 
+            int steps = countCollatz(numFromClient);
+
             try {
-                toClient.writeByte(charFromClient);
+                toClient.writeInt(steps);
             } catch (IOException e) {
                 System.err.println("Error writing character to client");
                 return;
-            }
-
-            if (charFromClient == 'q') {
-                System.out.println("\nBailing out!");
-                keepGoing = false;
             }
         }
 
@@ -86,6 +89,23 @@ public class CollatzServer {
             System.err.println("Error closing socket to client");
         }
 
+    }
+
+    public int countCollatz(int a) {
+        int count = 0;
+        while (a != 1) {
+            a = collatz(a);
+            count++;
+        }
+        return count;
+    }
+
+    public int collatz(int a) {
+        if (a % 2 == 0) {
+            return a / 2;
+        } else {
+            return a * 3 + 1;
+        }
     }
 
     public static void main(String args[]) throws Exception {
