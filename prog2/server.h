@@ -16,6 +16,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+// signal and pthread H files
+#include <signal.h>
+#include <pthread.h>
+
 /************************************************************************
  * function prototype declarations
  ************************************************************************/
