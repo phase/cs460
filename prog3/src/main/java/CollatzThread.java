@@ -22,35 +22,54 @@ public class CollatzThread implements Runnable {
             System.out.println("Connection with client established");
 
             // Initialize char and String variables for use in reading client input
-            char charFromClient;
             boolean keepGoing = true;
 
             // Loop reads client input one character at a time and echoes it to client
             // Loop continues until user inputs "quit" sequence
             while (keepGoing) {
+                if (clientSocket.isClosed()) {
+                    break;
+                }
+                int numFromClient;
                 try {
-                    charFromClient = (char) fromClient.readByte();
-                    System.out.print(charFromClient);
+                    numFromClient = fromClient.readInt();
+                    System.out.println("Num from client: " + numFromClient);
                 } catch (IOException e) {
-                    System.err.println("Error reading character from client");
+                    System.err.println("Warning reading character from client");
                     return;
                 }
 
+                int steps = countCollatz(numFromClient);
+
                 try {
-                    toClient.writeByte(charFromClient);
+                    toClient.writeInt(steps);
                 } catch (IOException e) {
                     System.err.println("Error writing character to client");
                     return;
-                }
-
-                if (charFromClient == 'q') {
-                    keepGoing = false;
                 }
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                     + 23657 + " or listening for a connection");
             System.out.println(e.getMessage());
+        }
+    }
+
+
+    public int countCollatz(int a) {
+        int count = 0;
+        while (a != 1) {
+            a = collatz(a);
+            count++;
+        }
+        return count;
+    }
+
+    public int collatz(int a) {
+        if (a % 2 == 0) {
+            return a / 2;
+        } else {
+            return a * 3 + 1;
         }
     }
 }
