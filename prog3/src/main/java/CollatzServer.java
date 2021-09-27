@@ -42,9 +42,9 @@ public class CollatzServer {
     public static void main(String args[]) throws Exception {
         // create instance of echo server
         // note that hardcoding the port is bad, here we do it just for simplicity reasons
-        CollatzServer echoServer = new CollatzServer(23657);
+        CollatzServer colServer = new CollatzServer(23657);
 
         // fire up server loop
-        echoServer.runServerLoop();
+        colServer.runServerLoop();
     }
 }
