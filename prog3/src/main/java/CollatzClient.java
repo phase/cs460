@@ -27,13 +27,15 @@ public class CollatzClient {
             DataInputStream fromServer = new DataInputStream(serverSocket.getInputStream());
             System.out.println("Client connect to " + hostName + " " + portNumber + "\n");
             Scanner scanner = new Scanner(System.in);
-
+            
+            //recieving the input for the server to run from the client
             System.out.print("Input a number: ");
             int input = Integer.parseInt(scanner.nextLine());
             toServer.writeInt(input);
             int response = fromServer.readInt();
             System.out.println("Collatz Conjecture took " + response + " steps!\n");
-
+            
+            //closing all the connections once it has completed
             toServer.close();
             fromServer.close();
             serverSocket.close();
