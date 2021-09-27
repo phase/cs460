@@ -7,6 +7,7 @@ public class CollatzThread implements Runnable {
     // clientSocket initialization and EchoThread constructor
     Socket clientSocket;
 
+    // constructor for the thread that we are creating
     public CollatzThread(Socket theClientSocket) {
         clientSocket = theClientSocket;
     }
@@ -35,7 +36,7 @@ public class CollatzThread implements Runnable {
                     numFromClient = fromClient.readInt();
                     System.out.println("Num from client: " + numFromClient);
                 } catch (IOException e) {
-                    System.err.println("Warning reading character from client");
+                    System.err.println("Warning reading number from client");
                     return;
                 }
 
@@ -44,7 +45,7 @@ public class CollatzThread implements Runnable {
                 try {
                     toClient.writeInt(steps);
                 } catch (IOException e) {
-                    System.err.println("Error writing character to client");
+                    System.err.println("Error writing number to client");
                     return;
                 }
             }
@@ -55,7 +56,7 @@ public class CollatzThread implements Runnable {
         }
     }
 
-
+    // function to count the number of steps as well as call the function being run on the number
     public int countCollatz(int a) {
         int count = 0;
         while (a != 1) {
@@ -64,7 +65,8 @@ public class CollatzThread implements Runnable {
         }
         return count;
     }
-
+    
+    // actual collatz function to reduce the number to one
     public int collatz(int a) {
         if (a % 2 == 0) {
             return a / 2;
