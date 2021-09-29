@@ -29,6 +29,7 @@ public class CollatzThread implements Runnable {
             // Loop continues until user inputs "quit" sequence
             while (keepGoing) {
                 if (clientSocket.isClosed()) {
+                    clientSocket.close()
                     break;
                 }
                 int numFromClient;
