@@ -1,1 +1,6 @@
 Notes from class on Prog3
+
+ONLY FOR C: ( java sends in big endian already )
+Sending numbers between server and client in big endian format, converting back to little endian to display to user
+
+
