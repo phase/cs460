@@ -36,7 +36,6 @@ public class CollatzThread implements Runnable {
                     numFromClient = fromClient.readInt();
                     System.out.println("Num from client: " + numFromClient);
                 } catch (IOException e) {
-                    System.err.println("Warning reading number from client");
                     return;
                 }
 
