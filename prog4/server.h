@@ -39,4 +39,4 @@ int three_a_plus_one(int input);
 #define TRUE !false
 
 // number of pending connections in the connection queue
-#define NUM_CONNECTIONS 2
+#define NUM_CONNECTIONS 30
