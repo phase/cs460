@@ -71,10 +71,11 @@ void *handle_client(void *args) {
     int client_socket = *((int *) args);
 
     int input;
-    int num_of_steps;
-    
-    // unlocking the pthread
+    int steps;
+
+    // unlocking the thread
     pthread_mutex_unlock(&pthread_mutex_client);
+
     // read int from client
     switch(read(client_socket, &input, sizeof(int)))
     {
@@ -88,11 +89,11 @@ void *handle_client(void *args) {
           break;
     }
 
-    printf("Value from client: %d\n", input);
+    printf("Number from client: %d\n", input);
     num_of_steps = three_a_plus_one(input);
-    printf("Took %d steps\n", num_of_steps);
+    printf("Took %d steps\n", steps);
 
-    write(client_socket, &num_of_steps, sizeof(int));
+    write(client_socket, &steps, sizeof(int));
 
     free(args);
 
