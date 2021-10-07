@@ -19,7 +19,9 @@ int main() {
         // in each loop, execute three_a_plus_one_wrapper in a thread from the pool
         int* task_num_ptr = (int*) malloc(sizeof(int));
         *task_num_ptr = task_counter;
+        
         threadpool_add_task(pool, task_copy_arguments, three_a_plus_one_wrapper, (void*)task_num_ptr);
+        
         usleep(1000);
     }
 
@@ -39,7 +41,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
     int client_socket;
     struct sockaddr_in client_address;
     int number = *((int*)number_ptr);
-    int num_of_steps;
+    int steps;
 
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -54,12 +56,12 @@ void three_a_plus_one_wrapper(void *number_ptr)
         exit(EXIT_FAILURE);
     } else {
         write(client_socket, number_ptr, sizeof(int));
-        read(client_socket, &num_of_steps, sizeof(int));
+        read(client_socket, &steps, sizeof(int));
 
         close(client_socket);
 
         printf("Number of steps: %d\n", num_of_steps);
-        printf("\nthread ID %p ----> %d: %d\n", pthread_self(), number, num_of_steps);
+        printf("\nthread ID %p ----> %d: %d\n", pthread_self(), number, steps);
     }
 }
 
