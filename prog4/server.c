@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     struct sockaddr_in server_address; // for naming the server's listening socket
     int client_socket;
 
-    pthread_t EchoThread;
+    pthread_t thread_id;
 
     // sent when ,client disconnected
     signal(SIGPIPE, SIG_IGN);
@@ -55,9 +55,9 @@ int main(int argc, char** argv) {
             int *clientSocket = malloc(sizeof(*clientSocket));
             *clientSocket = client_socket;
 
-            pthread_create(&EchoThread, NULL, handle_client, (void*)clientSocket);
+            pthread_create(&thread_id, NULL, handle_client, (void*)clientSocket);
 
-            pthread_detach(EchoThread);
+            pthread_detach(thread_id);
         }
     }
 }
@@ -72,8 +72,8 @@ void *handle_client(void *args) {
 
     int input;
     int num_of_steps;
-    //int keep_going = TRUE;
-
+    
+    // unlocking the pthread
     pthread_mutex_unlock(&pthread_mutex_client);
     // read int from client
     switch(read(client_socket, &input, sizeof(int)))
@@ -88,9 +88,9 @@ void *handle_client(void *args) {
           break;
     }
 
-    printf("got %d from client\n", input);
+    printf("Value from client: %d\n", input);
     num_of_steps = three_a_plus_one(input);
-    printf("computed %d steps\n", num_of_steps);
+    printf("Took %d steps\n", num_of_steps);
 
     write(client_socket, &num_of_steps, sizeof(int));
 
