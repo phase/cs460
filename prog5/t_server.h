@@ -20,6 +20,7 @@
 // signal and pthread H files
 #include <signal.h>
 #include <pthread.h>
+#include "threadpool.h"
 
 /************************************************************************
  * function prototype declarations

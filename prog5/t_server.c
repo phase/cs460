@@ -4,11 +4,24 @@
  * MAIN
  ************************************************************************/
 
+/* ******************************************************* */
+/* prepare arguments for thread function                   */
+/* ******************************************************* */
+void *task_copy_arguments(void *args_in) {
+    void *args_out;
+
+    args_out = malloc(sizeof(int));
+    *((int*)args_out) = *((int*)args_in);
+
+    return args_out;
+}
+
 int main(int argc, char** argv) {
     int server_socket;                 // descriptor of server socket
     struct sockaddr_in server_address; // for naming the server's listening socket
     int client_socket;
 
+    threadpool pool = threadpool_create();
     // sent when ,client disconnected
     signal(SIGPIPE, SIG_IGN);
 
@@ -43,14 +56,11 @@ int main(int argc, char** argv) {
             perror("Error accepting client");
         } else {
             printf("\nAccepted client\n");
-            // creating a thread
-            pthread_t thread_id;
             // allocating the arg being passed into the thread and declaring it
             int *cs = malloc(sizeof(*cs));
             *cs = client_socket;
-            // creating the pthread and then detaching it once the client disconnects
-            pthread_create(&thread_id, NULL, handle_client, cs);
-            pthread_detach(thread_id);
+            threadpool_add_task(pool, task_copy_arguments, handle_client, (void*)cs);
+            usleep(1000);
         }
     }
 }
