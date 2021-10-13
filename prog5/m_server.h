@@ -24,6 +24,8 @@
  * function prototype declarations
  ************************************************************************/
 void *handle_client(void* args);
+//int collatCounter(int input);
+int three_a_plus_one(int input);
 
 /************************************************************************
  * preprocessor directives

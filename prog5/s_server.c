@@ -53,38 +53,59 @@ int main(int argc, char** argv) {
  ************************************************************************/
 
 void handle_client(int client_socket) {
-    char input;
-    int keep_going = TRUE;
+    int input;
+    int steps;
 
-    while (keep_going) {
-        // read char from client
-        switch (read(client_socket, &input, sizeof(char))) {
-            case 0:
-                keep_going = FALSE;
-                printf("\nEnd of stream, returning ...\n");
-                break;
-            case -1:
-                perror("Error reading from network!\n");
-                keep_going = FALSE;
-                break;
-        }
-
-        printf("%c", input);
-
-        // check if we terminate
-        if (input == 'q') {
-            keep_going = FALSE;
-        }
-
-        // send result back to client
-        write(client_socket, &input, sizeof(char));
-
+    // read int from client
+    switch(read(client_socket, &input, sizeof(int)))
+    {
+      case 0:
+          printf("\nEnd of stream, returning...\n");
+          break;
+      case -1:
+          printf("Error reading from network!\n");
+          break;
     }
 
-    // cleanup
-    if (close(client_socket) == -1) {
-        perror("Error closing socket");
-    } else {
-        printf("\nClosed socket to client, exit");
+    printf("Number from client: %d\n", input);
+    steps = three_a_plus_one(input);
+    printf("Took %d steps\n", steps);
+
+    write(client_socket, &steps, sizeof(int));
+    close(client_socket);
+}
+
+
+int collatCounter(int input)
+{
+  int counter = 0;
+
+  while( input != 1 )
+  {
+    input = three_a_plus_one(input);
+    counter += 1;
+  }
+
+  return counter;
+}
+
+/* ******************************************************* */
+/* three_a_plus_one() - nonrecursive                       */
+/* ******************************************************* */
+int three_a_plus_one(int input)
+{
+    int counter = 0;
+    int current = input;
+
+    while (current != 1)
+    {
+        counter++;
+        if (current % 2) {
+            current = (current*3) + 1;
+        }
+        else {
+            current >>= 1;
+        }
     }
+    return counter;
 }
