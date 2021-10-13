@@ -61,7 +61,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
         usleep(500);
         close(client_socket);
 
-        printf("%d -------> %d", number, steps);
+        printf("%d -------> %d\n", number, steps);
     }
 }
 
