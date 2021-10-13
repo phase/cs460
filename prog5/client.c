@@ -57,11 +57,11 @@ void three_a_plus_one_wrapper(void *number_ptr)
     } else {
         write(client_socket, number_ptr, sizeof(int));
         read(client_socket, &steps, sizeof(int));
-
+        
+        usleep(500)
         close(client_socket);
 
-        printf("Number of steps: %d\n", steps);
-        printf("\nthread ID %p ----> %d: %d\n", pthread_self(), number, steps);
+        printf("%d -------> %d", number, steps);
     }
 }
 
