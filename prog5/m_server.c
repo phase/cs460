@@ -1,4 +1,4 @@
-#include "server.h"
+#include "m_server.h"
 
 pthread_mutex_t pthread_mutex_client = PTHREAD_MUTEX_INITIALIZER;
 

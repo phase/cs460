@@ -1,5 +1,5 @@
 #include "client.h"
-#include "server.h"
+#include "s_server.h"
 #include "threadpool.h"
 
 /* ******************************************************* */
@@ -58,7 +58,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
         write(client_socket, number_ptr, sizeof(int));
         read(client_socket, &steps, sizeof(int));
         
-        usleep(500)
+        usleep(500);
         close(client_socket);
 
         printf("%d -------> %d", number, steps);
