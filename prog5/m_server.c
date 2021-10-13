@@ -1,5 +1,7 @@
 #include "server.h"
 
+pthread_mutex_t pthread_mutex_client = PTHREAD_MUTEX_INITIALIZER;
+
 /************************************************************************
  * MAIN
  ************************************************************************/
@@ -17,7 +19,7 @@ int main(int argc, char** argv) {
         perror("Error creating socket");
         exit(EXIT_FAILURE);
     }
-    
+
     // name the socket (making sure the correct network byte ordering is observed)
     server_address.sin_family      = AF_INET;           // accept IP addresses
     server_address.sin_addr.s_addr = htonl(INADDR_ANY); // accept clients on any interface
@@ -37,7 +39,8 @@ int main(int argc, char** argv) {
     
     // server loop
     while (TRUE) {
-        
+
+        pthread_mutex_lock(&pthread_mutex_client);
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1) {
             perror("Error accepting client");
@@ -64,7 +67,10 @@ void *handle_client(void *args) {
     int client_socket = *((int *) args);
     char input;
     int keep_going = TRUE;
-    
+
+    // unlocking the thread
+    pthread_mutex_unlock(&pthread_mutex_client);
+
     while (keep_going) {
         // read char from client
         switch (read(client_socket, &input, sizeof(char))) {

@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
 
     // server loop
     while (TRUE) {
-
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1) {
             perror("Error accepting client");
