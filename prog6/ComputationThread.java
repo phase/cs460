@@ -105,8 +105,7 @@ public class ComputationThread implements Runnable {
                         toClient.writeBoolean(false);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    System.err.println("Error writing expression to client");
+                    System.err.println("Client has closed the connection!");
                     keepGoing = false;
                 }
             }
