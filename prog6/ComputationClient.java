@@ -43,7 +43,7 @@ public class ComputationClient {
             //recieving the input for the server to run from the client
             String input = scanner.nextLine();
             // loop to send and recieve data fromt he server
-            while (input != null && !input.trim().isEmpty()) {
+            while (!(input.equals("quit")) && !input.trim().isEmpty()) {
                 toServer.writeUTF(input);
                 boolean success = fromServer.readBoolean();
                 // check if the function was valid and didn't break any rules
