@@ -33,7 +33,7 @@ int three_a_plus_one(int input);
  * preprocessor directives
  ************************************************************************/
 #define SERVER_ADDR "127.0.0.1" // loopback ip address
-#define PORT 23657              // port the server will listen on
+#define PORT 23656              // port the server will listen on
 
 // I cannot let go of the old-fashioned way :) - for readability ...
 #define FALSE false
